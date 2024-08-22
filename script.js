@@ -1,6 +1,8 @@
 var root = document.querySelector(":root");
 var root_style = getComputedStyle(root);
 
+
+// #region bakcground gradient changes
 function random_hex() {
     var return_value = "";
     var hex_values = "0123456789abcdef";
@@ -121,5 +123,46 @@ function next_gradient(gradient=null) {
     // the fade out is gradual
     $(".background-secondary").fadeOut(2000,"linear",next_gradient);
 }
+// #endregion
+
+
+// #region book loading code
+
+/**
+ *
+ * @param {String} file the json file from which to laod the data.
+ * @returns {Object} the loaded data.
+ */
+function load_data(file) {
+    let data = null
+    fetch(file)
+        .then(response => response.json())
+        .then(books => {
+            data = books;
+        })
+        .catch(error => console.error(`There was an error fetching ${file}:`, error));
+
+        return data;
+}
+
+
+
+
+// #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.addEventListener("DOMContentLoaded",setup_gradient_changes);
