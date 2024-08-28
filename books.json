@@ -1,3 +1,7 @@
 [
-    "<paste books here>"
+    {
+        "title": "<Book Title Here>",
+        "author": "<Book Author Here>",
+        "content": "<Book Content Here>"
+    }
 ]

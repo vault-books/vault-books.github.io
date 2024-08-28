@@ -128,11 +128,6 @@ function next_gradient(gradient=null) {
 
 // #region book loading code
 
-/**
- *
- * @param {String} file the json file from which to laod the data.
- * @returns {Object} the loaded data.
- */
 function load_data(file) {
     let data = null
     fetch(file)
