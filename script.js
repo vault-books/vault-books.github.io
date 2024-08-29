@@ -13,8 +13,15 @@ function random_hex() {
     return return_value;
 }
 
+let toggle=true;
 function random_gradient() {
-
+    toggle = !toggle;
+    if (toggle) {
+        return "linear-gradient(to top    left,  #F00, transparent)";
+    }
+    else {
+        return "linear-gradient(to top    left,  #00F, transparent)";
+    }
     return `linear-gradient(to top    left,  #${random_hex()}, transparent),`+
            `linear-gradient(to top    right, #${random_hex()}, transparent),`+
            `linear-gradient(to bottom left,  #${random_hex()}, transparent),`+
@@ -26,6 +33,7 @@ function random_gradient() {
  * runs the first transition.
  */
 function setup_gradient_changes(gradient = null) {
+    console.log("setting up gradient changes")
     if (!gradient) {
         gradient = random_gradient();
     }
@@ -81,10 +89,10 @@ function setup_gradient_changes(gradient = null) {
 
         // put the backgrounds into the correct order. This is required for the fading effect to work.
         reorder_children(element);
-
-        // prevents initial black screen before fist transiiton.
-        next_gradient();
     }
+    // prevents initial black screen before fist transiiton.
+    console.log("calling next gradient")
+    next_gradient();
 }
 
 function reorder_children(element) {
@@ -98,11 +106,11 @@ function reorder_children(element) {
     // Clear the element
     element.innerHTML = '';
 
+    // Append secondary elements
+    secondaryElements.forEach(secondary => element.appendChild(secondary));
     // Append primary elements
     primaryElements.forEach(primary => element.appendChild(primary));
 
-    // Append secondary elements
-    secondaryElements.forEach(secondary => element.appendChild(secondary));
 
     // Append other elements
     otherElements.forEach(other => element.appendChild(other));
@@ -110,6 +118,7 @@ function reorder_children(element) {
 
 var current_gradient = random_gradient();
 function next_gradient(gradient=null) {
+    console.log("next gradient");
     if (!gradient) {
         gradient = random_gradient();
     }
@@ -144,20 +153,5 @@ function load_data(file) {
 
 
 // #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+console.log("Script loaded")
 document.addEventListener("DOMContentLoaded",setup_gradient_changes);
