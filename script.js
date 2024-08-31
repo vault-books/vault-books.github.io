@@ -153,5 +153,4 @@ function load_data(file) {
 
 
 // #endregion
-console.log("Script loaded")
 document.addEventListener("DOMContentLoaded",setup_gradient_changes);

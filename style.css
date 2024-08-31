@@ -89,6 +89,7 @@ footer {
 
 
 .background-primary {
+    background-attachment: fixed;
     margin-left: 200px;
     z-index: -2;
     overflow: auto;
@@ -105,6 +106,7 @@ footer {
 }
 
 .background-secondary {
+    background-attachment: fixed;
     z-index: -1;
     overflow: auto;
     opacity: var(--background-secondary-opacity,0.0);
@@ -129,9 +131,6 @@ footer {
     margin: 16px;
 }
 
-.noscroll {
-    overflow: hidden;
-}
 
 ::-webkit-scrollbar {
     width: 0px;
