@@ -87,10 +87,17 @@ footer {
     transition-timing-function: linear; /*this is because we want the background to be changing constantly and smoothly*/
 }
 
-
-.background-primary {
+.background {
     background-attachment: fixed;
-    margin-left: 200px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: linear-gradient(to top right,blue,transparent);
+}
+
+.background-back {
+    filter: blur(8000px);
+    -webkit-filter: blur(8000px);
     z-index: -2;
     overflow: auto;
     opacity: 1.0;
@@ -105,7 +112,9 @@ footer {
     linear-gradient(to bottom right, purple, transparent));
 }
 
-.background-secondary {
+.background-front {
+    filter: blur(8000px);
+    -webkit-filter: blur(8000px);
     background-attachment: fixed;
     z-index: -1;
     overflow: auto;
