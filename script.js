@@ -23,6 +23,18 @@ function random_gradient() {
            `linear-gradient(to bottom right, #${random_hex()}, transparent)`;
 }
 
+function escapeHTML(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    };
+    return text.replace(/[&<>"']/g, (char) => map[char]);
+}
+
+
 var current_gradient = random_gradient();
 function next_gradient(gradient=null) {
     console.log("next gradient");
@@ -45,12 +57,12 @@ function next_gradient(gradient=null) {
 
 
 // #region book loading code
-
+let book_data
 async function loadBooks() {
     try {
         // Load books.json
         let response = await fetch("books.json");
-        let data = await response.json();
+        book_data = await response.json();
         let templateResponse = await fetch("templates.html");
         let templateString = await templateResponse.text();
         let templateDocument = new DOMParser().parseFromString(templateString, 'text/html');
@@ -59,13 +71,13 @@ async function loadBooks() {
         $(".cover-container").empty(); // Clear any loading text or other previous content.
 
         let count=0;
-        data.books.forEach(book => {
+        book_data.books.forEach(book => {
             // Clone bookTemplate
             let bookElement = bookTemplate.clone();
 
-            bookElement.find(".title").text(book.title);
-            bookElement.find(".author").text(book.author);
-            bookElement.find(".blurb").text(book.blurb);
+            bookElement.find(".title").html(escapeHTML(book.title));
+            bookElement.find(".author").html(escapeHTML(book.author));
+            bookElement.find(".blurb").html(escapeHTML(book.blurb));
             bookElement.attr("id",`bookcover${count}`);
 
             bookElement.on("click", onBookClick.bind(null, bookElement.id))
@@ -79,7 +91,7 @@ async function loadBooks() {
 }
 
 function onBookClick(coverid) {
-    window.location.href = `${window.location.origin}/book.html`
+    window.location.href = `${window.location.origin}/book/${$(`#${coverid}`)}`
 }
 
 // #endregion
