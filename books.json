@@ -1,7 +1,10 @@
-[
-    {
-        "title": "<Book Title Here>",
-        "author": "<Book Author Here>",
-        "content": "<Book Content Here>"
-    }
-]
+{
+    "books":[
+        {
+            "title": "<Book Title Here>",
+            "author": "<Book Author Here>",
+            "blurb": "<Book Blurb Here>",
+            "content": "<Book Content Here>"
+        }
+    ]
+}
