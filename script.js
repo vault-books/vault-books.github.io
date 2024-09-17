@@ -1,8 +1,3 @@
-var root = document.querySelector(":root");
-var root_style = getComputedStyle(root);
-
-
-// #region background gradient changes
 function random_hex() {
     var return_value = "";
     var hex_values = "0123456789abcdef";
@@ -51,25 +46,42 @@ function next_gradient(gradient=null) {
 
 // #region book loading code
 
-function loadBooks() {
-    fetch("books.json")
-        .then(response => response.json())
-        .then(booksLoaded)
-        .catch(error => console.error(`There was an error fetching ${file}:`, error));
+async function loadBooks() {
+    try {
+        // Load books.json
+        let response = await fetch("books.json");
+        let data = await response.json();
+        let templateResponse = await fetch("templates.html");
+        let templateString = await templateResponse.text();
+        let templateDocument = new DOMParser().parseFromString(templateString, 'text/html');
+        let bookTemplate = $(templateDocument.getElementById("cover-template").innerHTML);
+
+        $(".cover-container").empty(); // Clear any loading text or other previous content.
+
+        let count=0;
+        data.books.forEach(book => {
+            // Clone bookTemplate
+            let bookElement = bookTemplate.clone();
+
+            bookElement.find(".title").text(book.title);
+            bookElement.find(".author").text(book.author);
+            bookElement.find(".blurb").text(book.blurb);
+            bookElement.attr("id",`bookcover${count}`);
+
+            bookElement.on("click", onBookClick.bind(null, bookElement.id))
+
+            $(".cover-container").append(bookElement);
+        })
+    }
+    catch (error) {
+        console.error("Error loading the books:",error)
+    }
 }
 
-function booksLoaded(bookdata) {
-    page = $('meta[name="page-id"]')
-
-    if (page.length == 0) {
-        console.error("missing page id")
-    }
-
-    if (page.attr("content")==="main") {
-        $(".cover-container")
-    }
+function onBookClick(coverid) {
+    window.location.href = `${window.location.origin}/book.html`
 }
 
 // #endregion
-document.addEventListener("DOMContentLoaded",next_gradient);
-document.addEventListener("DOMContentLoaded",loadBooks);
+$(document).ready(next_gradient);
+$(document).ready(loadBooks);

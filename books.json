@@ -5,6 +5,12 @@
             "author": "<Book Author Here>",
             "blurb": "<Book Blurb Here>",
             "content": "<Book Content Here>"
+        },
+        {
+            "title": "Cool Placeholder Title",
+            "author": "Max Lang",
+            "blurb": "A thrilling tale in which John Placeholder does placeholder things for the sake of having something to write. Please purchase a premium account to read the full story.",
+            "content": "Hey, you didn't purchase premium. No thrilling tale for you. You can have some exiting example text though. We have line breaks <br><br><br><b>Bold Text</b><br><i>Italic Text</i><br><em>Emphasized Text</em><br>"
         }
     ]
 }
