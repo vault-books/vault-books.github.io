@@ -34,6 +34,9 @@ function escapeHTML(text) {
     return text.replace(/[&<>"']/g, (char) => map[char]);
 }
 
+function get_current_page_id() {
+    
+}
 
 var current_gradient = random_gradient();
 function next_gradient(gradient=null) {
@@ -95,5 +98,15 @@ function onBookClick(coverid) {
 }
 
 // #endregion
+
+function main() {
+
+}
+
+
+
+
+
+
 $(document).ready(next_gradient);
 $(document).ready(loadBooks);
