@@ -35,7 +35,7 @@ function escapeHTML(text) {
 }
 
 function get_current_page_id() {
-    
+    return $('meta[name="page-id"]').attr("content");
 }
 
 var current_gradient = random_gradient();
@@ -100,13 +100,14 @@ function onBookClick(coverid) {
 // #endregion
 
 function main() {
-
+    loadBooks();
+    next_gradient();
 }
 
+function preLoad() {
+    //
+}
 
+$(document).ready(main);
 
-
-
-
-$(document).ready(next_gradient);
-$(document).ready(loadBooks);
+preLoad();
