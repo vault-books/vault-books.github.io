@@ -38,6 +38,13 @@ function get_current_page_id() {
     return $('meta[name="page-id"]').attr("content");
 }
 
+function get_path_parts() {
+    let path = window.location.pathname;
+    let path_no_slash = path.startsWith("/") ? path.slice(1) : path;
+    let path_parts = path_no_slash.split("/");
+    return path_parts;
+}
+
 var current_gradient = random_gradient();
 function next_gradient(gradient=null) {
     console.log("next gradient");
@@ -105,7 +112,16 @@ function main() {
 }
 
 function preLoad() {
-    //
+    console.log("Calling preLoad")
+    if (get_current_page_id()=="404") {
+        let path = get_path_parts();
+        if (path[0] == "book" && path.length == 2) {
+            if (/^[0-9]+$/.test(path[1])) {
+                let bookId = parseInt(path[1]);
+                
+            }
+        }
+    }
 }
 
 $(document).ready(main);
