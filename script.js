@@ -90,18 +90,22 @@ async function loadBooks() {
             bookElement.find(".blurb").html(escapeHTML(book.blurb));
             bookElement.attr("id",`bookcover${count}`);
 
-            bookElement.on("click", onBookClick.bind(null, bookElement.id))
+            bookElement.on("click", onBookClick.bind(null, String(bookElement.attr("id"))))
 
             $(".cover-container").append(bookElement);
+            count++;
         })
     }
     catch (error) {
-        console.error("Error loading the books:",error)
+        console.error("Error loading the books: ",error)
     }
 }
 
 function onBookClick(coverid) {
-    window.location.href = `${window.location.origin}/book/${$(`#${coverid}`)}`
+    if (coverid.startsWith("bookcover")) {
+        coverid = coverid.substring(9)
+    }
+    window.location.href = `${window.location.origin}/book/${coverid}`
 }
 
 // #endregion
@@ -113,13 +117,29 @@ function main() {
 
 function preLoad() {
     console.log("Calling preLoad")
-    if (get_current_page_id()=="404") {
+    let page_id = get_current_page_id();
+    if (page_id=="404") {
         let path = get_path_parts();
         if (path[0] == "book" && path.length == 2) {
             if (/^[0-9]+$/.test(path[1])) {
                 let bookId = parseInt(path[1]);
-                
+                window.location.href = `${window.location.origin}/book.html?id=${bookId}`
             }
+        }
+    }
+    else if (page_id=="book") {
+        let urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("id")) {
+            // Inject the book contense into the page.
+            let data = book_data["books"][parseInt(urlParams.get("id"))]
+            $(".title").html(data["title"])
+            $(".author").html(data["author"])
+            $(".blurb").html(data["blurb"])
+            $(".content").html(data["content"])
+        }
+        else {
+            console.log("No book id provided. Redirecting to 404")
+            window.location.href = `${window.location.origin}/404.html`
         }
     }
 }
