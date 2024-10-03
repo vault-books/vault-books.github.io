@@ -67,7 +67,7 @@ function next_gradient(gradient=null) {
 
 
 // #region book loading code
-let book_data
+var book_data
 async function loadBooks() {
     try {
         // Load books.json
@@ -99,6 +99,7 @@ async function loadBooks() {
     catch (error) {
         console.error("Error loading the books: ",error)
     }
+    console.log("books all loaded");
 }
 
 function onBookClick(coverid) {
@@ -119,9 +120,11 @@ function preLoad() {
     console.log("Calling preLoad")
     let page_id = get_current_page_id();
     if (page_id=="404") {
+        console.log("wudda")
         let path = get_path_parts();
-        if (path[0] == "book" && path.length == 2) {
-            if (/^[0-9]+$/.test(path[1])) {
+        if ((path[0] == "book" && path.length == 2) || true) {
+            console.log("here i am sitting in a tin can eating soup... yummy")
+            if (/^[0-9]+$/.test(path[1]) || true) {
                 let bookId = parseInt(path[1]);
                 window.location.href = `${window.location.origin}/book.html?id=${bookId}`
             }
@@ -132,10 +135,10 @@ function preLoad() {
         if (urlParams.has("id")) {
             // Inject the book contense into the page.
             let data = book_data["books"][parseInt(urlParams.get("id"))]
-            $(".title").html(data["title"])
-            $(".author").html(data["author"])
-            $(".blurb").html(data["blurb"])
-            $(".content").html(data["content"])
+            $(".title").html(data["title"]);
+            $(".author").html(data["author"]);
+            $(".blurb").html(data["blurb"]);
+            $(".content").html(data["content"]);
         }
         else {
             console.log("No book id provided. Redirecting to 404")
