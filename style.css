@@ -50,6 +50,10 @@ footer {
     font-style: normal;
 }
 
+p {
+    color: white;
+}
+
 .cover-container {
     background-blend-mode: screen;
     width: 100%;

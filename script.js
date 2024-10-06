@@ -47,7 +47,6 @@ function get_path_parts() {
 
 var current_gradient = random_gradient();
 function next_gradient(gradient=null) {
-    console.log("next gradient");
     if (!gradient) {
         gradient = random_gradient();
     }
@@ -63,16 +62,17 @@ function next_gradient(gradient=null) {
 
     setTimeout(2000,next_gradient); // This approach avoids recursion limit issues.
 }
-// #endregion
 
-
-// #region book loading code
 var book_data
-async function loadBooks() {
+var books_loaded = false
+async function loadBookList() {
+    // Loads the books in `books.json` into the book list.
     try {
         // Load books.json
         let response = await fetch("books.json");
         book_data = await response.json();
+
+        // Load and parse the book cover template
         let templateResponse = await fetch("templates.html");
         let templateString = await templateResponse.text();
         let templateDocument = new DOMParser().parseFromString(templateString, 'text/html');
@@ -90,7 +90,7 @@ async function loadBooks() {
             bookElement.find(".blurb").html(escapeHTML(book.blurb));
             bookElement.attr("id",`bookcover${count}`);
 
-            bookElement.on("click", onBookClick.bind(null, String(bookElement.attr("id"))))
+            bookElement.on("click", onBookClick.bind(null, count))
 
             $(".cover-container").append(bookElement);
             count++;
@@ -99,54 +99,63 @@ async function loadBooks() {
     catch (error) {
         console.error("Error loading the books: ",error)
     }
-    console.log("books all loaded");
+    books_loaded = true
 }
 
 function onBookClick(coverid) {
-    if (coverid.startsWith("bookcover")) {
-        coverid = coverid.substring(9)
-    }
-    window.location.href = `${window.location.origin}/book/${coverid}`
+    alert(coverid)
+    console.log(coverid)
+    window.location.href = `${window.location.origin}/book?id=${coverid}`
 }
 
-// #endregion
-
-function main() {
-    loadBooks();
-    next_gradient();
-}
-
-function preLoad() {
-    console.log("Calling preLoad")
+async function main() {
+    // Get the page id for the current page.
     let page_id = get_current_page_id();
-    if (page_id=="404") {
-        console.log("wudda")
-        let path = get_path_parts();
-        if ((path[0] == "book" && path.length == 2) || true) {
-            console.log("here i am sitting in a tin can eating soup... yummy")
-            if (/^[0-9]+$/.test(path[1]) || true) {
-                let bookId = parseInt(path[1]);
-                window.location.href = `${window.location.origin}/book.html?id=${bookId}`
-            }
-        }
+
+    if (page_id=="index") {
+        loadBookList();
+        next_gradient();
     }
     else if (page_id=="book") {
         let urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has("id")) {
-            // Inject the book contense into the page.
+            // Load books.json
+            let response = await fetch("books.json");
+            book_data = await response.json();
+
             let data = book_data["books"][parseInt(urlParams.get("id"))]
+            console.log("yeeting nopesups: ")
+            console.log(data)
+            // Inject the book contents into the page.
             $(".title").html(data["title"]);
             $(".author").html(data["author"]);
             $(".blurb").html(data["blurb"]);
             $(".content").html(data["content"]);
         }
         else {
-            console.log("No book id provided. Redirecting to 404")
+            //TODO: add a URL parameter telling the 404 page why the book was not found
+            // i.e. that the id did not exist as opposed to the page itself not existing.
             window.location.href = `${window.location.origin}/404.html`
+        }
+    }
+}
+
+function preLoad() {
+    // Get the page id for the current page.
+    let page_id = get_current_page_id();
+
+    if (page_id=="404") {
+        // Attempt to work out which page was the intended destination from the url.
+        let path = get_path_parts();
+        if ((path[0] == "book" && path.length == 2) || true) {
+            if (/^[0-9]+$/.test(path[1]) || true) {
+                let bookId = parseInt(path[1]);
+                window.location.href = `${window.location.origin}/book.html?id=${bookId}`
+            }
         }
     }
 }
 
 $(document).ready(main);
 
-preLoad();
+// preLoad(); // currently doesn't do anything worthwhile.
